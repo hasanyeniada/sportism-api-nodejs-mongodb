@@ -1,0 +1,16 @@
+{
+  "name": "mycoach",
+  "version": "1.0.0",
+  "description": "Personal Coach Center App",
+  "main": "app.js",
+  "scripts": {
+    "start-dev": "nodemon app.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Hasan Yeniada",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.18.1",
+    "nodemon": "^2.0.20"
+  }
+}

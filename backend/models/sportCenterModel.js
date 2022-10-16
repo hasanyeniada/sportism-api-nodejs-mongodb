@@ -48,6 +48,17 @@ const sportCenterSchema = new mongoose.Schema({
     default: Date.now(),
     select: false
   },
+},
+{
+  toJSON: { virtuals: true },
+  toObject: { virtuals: true }
+});
+
+sportCenterSchema.virtual('workingDuration').get(function () {
+  return (
+    Number(this.workingHours[1].split(':')[0]) -
+    Number(this.workingHours[0].split(':')[0])
+  );
 });
 
 const SportCenter = mongoose.model('SportCenter', sportCenterSchema);

@@ -7,6 +7,15 @@ const sportCenterSchema = new mongoose.Schema(
       type: String,
       required: [true, 'A SportCenter must have a name'],
       unique: true,
+      maxlength: [
+        40,
+        'A SportCenter name must have less or equal then 40 characters',
+      ],
+      minlength: [
+        10,
+        'A SportCenter name must have more or equal then 10 characters',
+      ],
+      // validate: [validator.isAlpha, 'Tour name must only contain characters']
     },
     workingHours: {
       type: Array,
@@ -15,6 +24,8 @@ const sportCenterSchema = new mongoose.Schema(
     ratingsAverage: {
       type: Number,
       default: 4,
+      min: [1, 'Rating must be above 1.0'],
+      max: [5, 'Rating must be below 5.0'],
     },
     ratingsQuantity: {
       type: Number,
@@ -30,6 +41,13 @@ const sportCenterSchema = new mongoose.Schema(
     },
     priceDiscount: {
       type: Number,
+      validate: {
+        validator: function (val) {
+          // this only points to current doc on NEW document creation
+          return val < this.monthlyPrice;
+        },
+        message: 'Discount monthlyPrice ({VALUE}) should be below regular monthlyPrice',
+      },
     },
     summary: {
       type: String,

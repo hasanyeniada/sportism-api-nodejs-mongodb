@@ -4,7 +4,7 @@ const APIFeatures = require('../utils/apiFeatures');
 const aliasTopSportCenters = (req, resp, next) => {
   req.query.limit = '5';
   req.query.sort = '-ratingsAverage,monthlyPrice';
-  req.query.fields = 'name,monthlyPrice,ratingsAverage,summary';
+  req.query.fields = 'name,monthlyPrice,ratingsAverage,summary,workingHours';
   next();
 };
 
@@ -28,6 +28,7 @@ const getAllSportCenters = async (req, resp) => {
     });
     
   } catch (err) {
+    console.log(err);
     resp.status(404).json({
       status: 'fail',
       message: err,

@@ -1,104 +1,139 @@
-const fs = require('fs');
+const SportCenter = require('../models/sportCenterModel');
 
-const sportCentersData = JSON.parse(
-  fs.readFileSync(
-    `${__dirname}/../dev-data/data/simple-sport-centers.json`,
-    'utf-8'
-  )
-);
-
-const checkId = (req, resp, next, val) => {
-  console.log(`Requested Tour id is => ${val}`);
-  const id = Number.parseInt(req.params.id);
-  const sportCenter = sportCentersData.find((el) => el.id === id);
-
-  if (!sportCenter) {
-    return resp.status(404).json({
-      status: 'fail',
-      message: 'Invalid Id',
-    });
-  }
+const aliasTopSportCenters = (req, resp, next) => {
+  req.query.limit = '5';
+  req.query.sort = '-ratingsAverage,monthlyPrice';
+  req.query.fields = 'name,monthlyPrice,ratingsAverage,summary';
   next();
 };
 
-const checkBody = (req, resp, next) => {
-  const requestBody = req && req.body;
-  console.log(requestBody);
-  if (!requestBody || !requestBody.name || !requestBody['monthly-price']) {
-    return resp.status(400).json({
-      status: 'fail',
-      message:
-        'Bad request, cannot be created sport center without name and price!',
-    });
-  }
-  next();
-};
+const getAllSportCenters = async (req, resp) => {
+  try {
+    console.log(req.query);
+    const queryObj = { ...req.query };
+    const excludedFields = ['page', 'sort', 'limit', 'fields'];
+    excludedFields.forEach((el) => delete queryObj[el]);
 
-const getAllSportCenters = (req, resp) => {
-  resp.status(200).json({
-    status: 'success',
-    results: sportCentersData.length,
-    data: sportCentersData,
-  });
-};
+    // 1) Filtering
+    let query = SportCenter.find(req.query);
 
-const getSingleSportCenterWithId = (req, resp) => {
-  const id = Number.parseInt(req.params.id);
+    // Solution 2
+    // const query = SportCenter.find()
+    //   .where('priceDiscount')
+    //   .equals(0)
+    //   .where('monthlyPrice')
+    //   .equals(300);
 
-  const sportCenter = sportCentersData.find((el) => el.id === id);
-  resp.status(200).json({
-    status: 'success',
-    data: sportCenter,
-  });
-};
-
-const createSportCenter = (req, resp) => {
-  const newId = Date.now();
-  const newSportCenter = Object.assign({ id: newId }, req.body);
-
-  sportCentersData.push(newSportCenter);
-
-  fs.writeFile(
-    `${__dirname}/dev-data/data/simple-sport-centers.json`,
-    JSON.stringify(sportCentersData),
-    (err) => {
-      console.log(err)
+    // 2) Sorting
+    if (req.query.sort) {
+      const sortBy = req.query.sort.split(',').join(' ');
+      query = query.sort(sortBy);
     }
-  );
 
-  resp.status(201).json({
-    status: 'success',
-    data: newSportCenter,
-  });
+    // 3) Field Limiting
+    if (req.query.fields) {
+      const selectBy = req.query.fields.split(',').join(' ');
+      query = query.select(selectBy);
+    } else {
+      query = query.select('-__v');
+    }
+
+    // 4) Pagination
+    const page = Number(req.query.page) || 1;
+    const limitBy = Number(req.query.limit) || 100;
+    const skipBy = (page - 1) * limitBy;
+    query = query.skip(skipBy).limit(limitBy);
+
+    if (req.query.page) {
+      // Gives number of documents
+      const numTours = await SportCenter.countDocuments();
+      if (skip > numTours) throw new Error('This page does not exist');
+    }
+
+    const sportCentersData = await query;
+
+    resp.status(200).json({
+      status: 'success',
+      results: sportCentersData.length,
+      data: sportCentersData,
+    });
+  } catch (err) {
+    resp.status(404).json({
+      status: 'fail',
+      message: err,
+    });
+  }
 };
 
-const updateSportCenterWithId = (req, resp) => {
-  // const id = Number.parseInt(req.params.id);
-  // const sportCenter = sportCentersData.find((el) => el.id === id);
-  resp.status(200).json({
-    status: 'success',
-    data: { sportCenter: 'Updated Sport Center Here!' },
-  });
+const getSingleSportCenterWithId = async (req, resp) => {
+  try {
+    const sportCenter = await SportCenter.findById(req.params.id);
+    console.log(req.params.id);
+    // Tour.findOne({ _id: id })
+
+    resp.status(200).json({
+      status: 'success',
+      data: sportCenter,
+    });
+  } catch (err) {
+    resp.status(404).json({
+      status: 'fail',
+      message: err,
+    });
+  }
 };
 
-const deleteSportCenterWithId = (req, resp) => {
-  const id = Number.parseInt(req.params.id);
-  const sportCenter = sportCentersData.find((el) => el.id === id);
+const createSportCenter = async (req, resp) => {
+  try {
+    const newSportCenter = await SportCenter.create(req.body);
+    console.log(newSportCenter);
+    resp.status(201).json({
+      status: 'success',
+      data: newSportCenter,
+    });
+  } catch (err) {
+    resp.status(400).json({
+      status: 'fail',
+      message: err,
+    });
+  }
+};
 
-  const sportCentersDataTemp = sportCentersData.filter(
-    (el) => el.id !== sportCenter.id
-  );
+const updateSportCenterWithId = async (req, resp) => {
+  try {
+    const sportCenterUpdated = await SportCenter.findByIdAndUpdate(
+      req.params.id,
+      req.body,
+      {
+        new: true,
+        runValidators: true,
+      }
+    );
+    resp.status(200).json({
+      status: 'success',
+      data: { sportCenter: sportCenterUpdated },
+    });
+  } catch (err) {
+    resp.status(404).json({
+      status: 'fail',
+      message: err,
+    });
+  }
+};
 
-  fs.writeFile(
-    `${__dirname}/../dev-data/data/simple-sport-centers.json`,
-    JSON.stringify(sportCentersDataTemp),
-    (err) => { console.log(err) }
-  );
-
-  resp.status(200).json({
-    status: 'success',
-    data: sportCenter,
-  });
+const deleteSportCenterWithId = async (req, resp) => {
+  try {
+    await SportCenter.findByIdAndDelete(req.params.id);
+    resp.status(200).json({
+      status: 'success',
+      data: null,
+    });
+  } catch (err) {
+    resp.status(404).json({
+      status: 'fail',
+      message: err,
+    });
+  }
 };
 
 module.exports = {
@@ -107,6 +142,5 @@ module.exports = {
   createSportCenter,
   deleteSportCenterWithId,
   updateSportCenterWithId,
-  checkId,
-  checkBody
+  aliasTopSportCenters,
 };

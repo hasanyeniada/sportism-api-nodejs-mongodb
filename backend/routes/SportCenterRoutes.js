@@ -3,13 +3,18 @@ const router = express.Router();
 
 const sportCenterRouteHandlers = require('../controllers/SportCenterController');
 
-router.param('id', sportCenterRouteHandlers.checkId);
+router
+  .route('/top-5-cheap')
+  .get(
+    sportCenterRouteHandlers.aliasTopSportCenters,
+    sportCenterRouteHandlers.getAllSportCenters
+  );
 
 router
   .route('/')
   .get(sportCenterRouteHandlers.getAllSportCenters)
-  .post(sportCenterRouteHandlers.checkBody, sportCenterRouteHandlers.createSportCenter);
-  
+  .post(sportCenterRouteHandlers.createSportCenter);
+
 router
   .route('/:id')
   .get(sportCenterRouteHandlers.getSingleSportCenterWithId)

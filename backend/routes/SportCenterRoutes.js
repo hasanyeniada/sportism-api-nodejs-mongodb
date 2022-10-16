@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 
 const sportCenterRouteHandlers = require('../controllers/SportCenterController');
+const SportCenter = require('../models/sportCenterModel');
 
 router
   .route('/top-5-cheap')
@@ -9,6 +10,10 @@ router
     sportCenterRouteHandlers.aliasTopSportCenters,
     sportCenterRouteHandlers.getAllSportCenters
   );
+
+router
+  .route('/sportcenter-stats')
+  .get(sportCenterRouteHandlers.getSportCenterStats);
 
 router
   .route('/')

@@ -106,6 +106,44 @@ const deleteSportCenterWithId = async (req, resp) => {
   }
 };
 
+const getSportCenterStats = async (req, resp) => {
+  try {
+    const stats = await SportCenter.aggregate([
+      {
+        $match: { ratingsAverage: { $gte: 4.5 } },
+      },
+      {
+        $group: {
+          _id: null,
+          numSportCenters: { $sum: 1 },
+          numRatings: { $sum: '$ratingsQuantity' },
+          avgRating: { $avg: '$ratingsAverage' },
+          avgPrice: { $avg: '$monthlyPrice' },
+          minPrice: { $min: '$monthlyPrice' },
+          maxPrice: { $max: '$monthlyPrice' },
+        },
+      },
+      {
+        $sort: { avgPrice: 1 },
+      },
+      // {
+      //   $match: { maxPrice: { $gt: 200 } }
+      // }
+    ]);
+
+    resp.status(200).json({
+       status: 'success',
+       data: stats,
+    });
+
+  } catch (err) {
+    resp.status(404).json({
+      status: 'fail',
+      message: err,
+    });
+  }
+};
+
 module.exports = {
   getAllSportCenters,
   getSingleSportCenterWithId,
@@ -113,4 +151,5 @@ module.exports = {
   deleteSportCenterWithId,
   updateSportCenterWithId,
   aliasTopSportCenters,
+  getSportCenterStats
 };

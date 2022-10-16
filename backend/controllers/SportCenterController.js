@@ -1,4 +1,5 @@
 const SportCenter = require('../models/sportCenterModel');
+const APIFeatures = require('../utils/apiFeatures');
 
 const aliasTopSportCenters = (req, resp, next) => {
   req.query.limit = '5';
@@ -9,54 +10,23 @@ const aliasTopSportCenters = (req, resp, next) => {
 
 const getAllSportCenters = async (req, resp) => {
   try {
-    console.log(req.query);
-    const queryObj = { ...req.query };
-    const excludedFields = ['page', 'sort', 'limit', 'fields'];
-    excludedFields.forEach((el) => delete queryObj[el]);
-
-    // 1) Filtering
-    let query = SportCenter.find(req.query);
-
-    // Solution 2
-    // const query = SportCenter.find()
-    //   .where('priceDiscount')
-    //   .equals(0)
-    //   .where('monthlyPrice')
-    //   .equals(300);
-
-    // 2) Sorting
-    if (req.query.sort) {
-      const sortBy = req.query.sort.split(',').join(' ');
-      query = query.sort(sortBy);
-    }
-
-    // 3) Field Limiting
-    if (req.query.fields) {
-      const selectBy = req.query.fields.split(',').join(' ');
-      query = query.select(selectBy);
-    } else {
-      query = query.select('-__v');
-    }
-
-    // 4) Pagination
-    const page = Number(req.query.page) || 1;
-    const limitBy = Number(req.query.limit) || 100;
-    const skipBy = (page - 1) * limitBy;
-    query = query.skip(skipBy).limit(limitBy);
-
-    if (req.query.page) {
-      // Gives number of documents
-      const numTours = await SportCenter.countDocuments();
-      if (skip > numTours) throw new Error('This page does not exist');
-    }
-
-    const sportCentersData = await query;
+    const features = new APIFeatures(
+      SportCenter.find(),
+      req.query
+    )
+    .filter()
+    .sort()
+    .limitFields()
+    .paginate();
+    
+    const sportCentersData = await features.query;
 
     resp.status(200).json({
       status: 'success',
       results: sportCentersData.length,
       data: sportCentersData,
     });
+    
   } catch (err) {
     resp.status(404).json({
       status: 'fail',

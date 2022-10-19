@@ -3,6 +3,8 @@ const morgan = require('morgan');
 
 const sportCenterRoutes = require('./routes/SportCenterRoutes');
 const userRoutes = require('./routes/UserRoutes');
+const globalErrorHandler = require('./middlewares/globalErrorHandler');
+const AppError = require('./utils/appError');
 
 const app = express();
 
@@ -26,5 +28,13 @@ app.use((req, resp, next) => {
 // 3) Routes
 app.use('/api/v1/sportcenters', sportCenterRoutes);
 app.use('/api/v1/users', userRoutes);
+
+// 4) Unhandled Routes
+app.all('*', (req, resp, next) => {
+  next(new AppError(`Can't find ${req.originalUrl} in that server!`, 404));
+});
+
+// 5) Global error handler mw
+app.use(globalErrorHandler);
 
 module.exports = app;

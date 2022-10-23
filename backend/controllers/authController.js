@@ -6,6 +6,30 @@ const sendEmail = require('../utils/email');
 const AppError = require('../utils/appError');
 const catchAsync = require('../utils/catchAsync');
 
+const createSendToken = (user, statusCode, resp) => {
+  const token = signToken(user._id);
+  const cookieOptions = {
+    expires: new Date(
+      Date.now() + process.env.JWT_COOKIE_EXPIRES_IN * 24 * 60 * 60 * 1000
+    ),
+    httpOnly: true,
+  };
+  if (process.env.NODE_ENV === 'production') cookieOptions.secure = true;
+
+  resp.cookie('jwt', token, cookieOptions);
+
+  // Remove password from output
+  user.password = undefined;
+
+  resp.status(statusCode).json({
+    status: 'success',
+    token,
+    data: {
+      user,
+    },
+  });
+};
+
 const signToken = (id) => {
   return jwt.sign({ id }, process.env.JWT_SECRET, {
     expiresIn: process.env.JWT_EXPIRES_IN,
@@ -24,13 +48,7 @@ const signUp = catchAsync(async (req, resp, next) => {
 
   const token = signToken(newUser._id);
 
-  resp.status(201).json({
-    status: 'success',
-    token,
-    data: {
-      user: newUser,
-    },
-  });
+  createSendToken(newUser, 201, resp);
 });
 
 const login = catchAsync(async (req, resp, next) => {
@@ -44,13 +62,7 @@ const login = catchAsync(async (req, resp, next) => {
     return next(new AppError('Invalid email or password!', 400));
   }
   
-  const token = signToken(user._id);
-  resp.status(200).json({
-    status: 'success',
-    data: {
-      token,
-    },
-  });
+  createSendToken(user, 200, resp);
 });
 
 const checkAuthentication = catchAsync(async (req, resp, next) => {
@@ -173,14 +185,35 @@ const resetPassword = catchAsync(async (req, resp, next) => {
 
   // 3) Update changedPasswordAt property for the user
   // 4) Log the user in, send JWT
-  res.status(200).json({
-    status: 'success',
-    token,
-    data: {
-      user,
-    },
-  });
+  createSendToken(user, 200, res);
 });  
+
+const updatePassword = catchAsync(async (req, resp, next) => {
+  console.log(req.user);
+  // 1) Get the user from collection.
+  const userToUpdatePsw = await User
+    .findById(req.user.id)
+    .select('+password');
+
+  if (!userToUpdatePsw) {
+    next(new AppError('You should log in to update your password.', 401));
+  }
+  console.log(userToUpdatePsw);
+
+  // 2) Check if POSTed password is correct.
+  if (!(await userToUpdatePsw.correctPassword(req.body.password, userToUpdatePsw.password))) {
+    return next(new AppError('Incorrect email or password', 401));
+  }
+
+  // 3) If so, update the password.
+  userToUpdatePsw.password = req.body.newPassword;
+  userToUpdatePsw.passwordConfirm = req.body.newPassword;
+  await userToUpdatePsw.save();
+
+  // 4) Log the user in, send JWT back to user.
+  createSendToken(userToUpdatePsw, 200, resp);
+});
+
   
 module.exports = {
   signUp,
@@ -188,5 +221,6 @@ module.exports = {
   checkAuthentication,
   checkAuthorization,
   forgotPassword,
-  resetPassword
+  resetPassword,
+  updatePassword
 };

@@ -13,6 +13,16 @@ router
   .post('/forgotPassword', authRouteHandler.forgotPassword);
 router
   .patch('/resetPassword/:token', authRouteHandler.resetPassword);
+router
+  .patch('/updateMyPassword',
+    authRouteHandler.checkAuthentication,
+    authRouteHandler.updatePassword
+);
+router
+  .patch('/updateMe',
+    authRouteHandler.checkAuthentication,
+    userRouteHandlers.updateMe
+);
 
 router
   .route('/')

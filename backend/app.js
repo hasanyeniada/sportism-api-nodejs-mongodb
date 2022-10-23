@@ -1,8 +1,8 @@
 const express = require('express');
 const morgan = require('morgan');
 
-const sportCenterRoutes = require('./routes/SportCenterRoutes');
-const userRoutes = require('./routes/UserRoutes');
+const sportCenterRoutes = require('./routes/sportCenterRoutes');
+const userRoutes = require('./routes/userRoutes');
 const globalErrorHandler = require('./middlewares/globalErrorHandler');
 const AppError = require('./utils/appError');
 

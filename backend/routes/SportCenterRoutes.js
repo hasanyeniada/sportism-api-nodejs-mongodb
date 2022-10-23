@@ -1,7 +1,8 @@
 const express = require('express');
 const router = express.Router();
 
-const sportCenterRouteHandlers = require('../controllers/SportCenterController');
+const authController = require('../controllers/authController');
+const sportCenterRouteHandlers = require('../controllers/sportCenterController');
 const SportCenter = require('../models/sportCenterModel');
 
 router
@@ -17,7 +18,7 @@ router
 
 router
   .route('/')
-  .get(sportCenterRouteHandlers.getAllSportCenters)
+  .get(authController.protect, sportCenterRouteHandlers.getAllSportCenters)
   .post(sportCenterRouteHandlers.createSportCenter);
 
 router

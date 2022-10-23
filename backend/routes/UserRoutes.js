@@ -23,6 +23,11 @@ router
     authRouteHandler.checkAuthentication,
     userRouteHandlers.updateMe
 );
+router.delete(
+  '/deleteMe',
+  authRouteHandler.checkAuthentication,
+  userRouteHandlers.deleteMe
+);
 
 router
   .route('/')

@@ -18,13 +18,20 @@ router
 
 router
   .route('/')
-  .get(authController.protect, sportCenterRouteHandlers.getAllSportCenters)
+  .get(
+    authController.checkAuthentication,
+    sportCenterRouteHandlers.getAllSportCenters
+  )
   .post(sportCenterRouteHandlers.createSportCenter);
 
 router
   .route('/:id')
   .get(sportCenterRouteHandlers.getSingleSportCenterWithId)
   .patch(sportCenterRouteHandlers.updateSportCenterWithId)
-  .delete(sportCenterRouteHandlers.deleteSportCenterWithId);
+  .delete(
+    authController.checkAuthentication,
+    authController.checkAuthorization('admin', 'lead-guide'),
+    sportCenterRouteHandlers.deleteSportCenterWithId
+  );
 
 module.exports = router;

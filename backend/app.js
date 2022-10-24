@@ -1,11 +1,11 @@
 const express = require('express');
 const morgan = require('morgan');
+const rateLimit = require('express-rate-limit');
 const helmet = require('helmet');
 
 const sportCenterRoutes = require('./routes/sportCenterRoutes');
 const userRoutes = require('./routes/userRoutes');
 const globalErrorHandler = require('./middlewares/globalErrorHandler');
-const rateLimiter = require('./middlewares/rateLimiter');
 const AppError = require('./utils/appError');
 
 const app = express();
@@ -21,6 +21,11 @@ if (process.env.NODE_ENV === 'development') {
 }
 
 // Limit requests from same API
+const rateLimiter = rateLimit({
+  max: 100,
+  windowMs: 60 * 60 * 1000,
+  message: 'Too many requests from this IP, please try again in an hour!',
+});
 app.use('/api', rateLimiter);
 
 // Body parser, reading data from body into req.body

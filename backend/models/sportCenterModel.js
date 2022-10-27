@@ -98,6 +98,13 @@ const sportCenterSchema = new mongoose.Schema(
   }
 );
 
+// 1: sorting price index in ascending order
+// -1: sorting price index in descending order
+// tourSchema.index({ monthlyPrice: 1 });
+sportCenterSchema.index({ monthlyPrice: 1, ratingsAverage: -1 });
+sportCenterSchema.index({ slug: 1 });
+sportCenterSchema.index({ location: '2dsphere' });
+
 sportCenterSchema.virtual('workingDuration').get(function () {
   // return (
   //   Number(this.workingHours[1].split(':')[0]) -

@@ -1,7 +1,6 @@
 const SportCenter = require('../models/sportCenterModel');
-const APIFeatures = require('../utils/apiFeatures');
 const catchAsync = require('../utils/catchAsync');
-const AppError = require('../utils/appError');
+const routeHandlerFactory = require('./routeHandlerFactory');
 
 const aliasTopSportCenters = (req, resp, next) => {
   req.query.limit = '5';
@@ -10,77 +9,13 @@ const aliasTopSportCenters = (req, resp, next) => {
   next();
 };
 
-const getAllSportCenters = catchAsync(async (req, resp, next) => {
-  const features = new APIFeatures(SportCenter.find(), req.query)
-    .filter()
-    .sort()
-    .limitFields()
-    .paginate();
-
-  const sportCentersData = await features.query;
-
-  resp.status(200).json({
-    status: 'success',
-    results: sportCentersData.length,
-    data: sportCentersData,
-  });
+const getAllSportCenters = routeHandlerFactory.getAll(SportCenter);
+const getSingleSportCenterWithId = routeHandlerFactory.getOne(SportCenter, {
+  path: 'reviews',
 });
-
-const getSingleSportCenterWithId = catchAsync(async (req, resp, next) => {
-  const sportCenter = await SportCenter.findById(req.params.id);
-  // const sportCenter = await (await SportCenter.findById(req.params.id)).populated('reviews');
-  // Tour.findOne({ _id: id })
-
-  if (!sportCenter) {
-    return next(new AppError(`Can't find sportCenter with given id!`, 404));
-  }
-
-  resp.status(200).json({
-    status: 'success',
-    data: sportCenter,
-  });
-});
-
-const createSportCenter = catchAsync(async (req, resp, next) => {
-  const newSportCenter = await SportCenter.create(req.body);
-  resp.status(201).json({
-    status: 'success',
-    data: newSportCenter,
-  });
-});
-
-const updateSportCenterWithId = catchAsync(async (req, resp, next) => {
-  const sportCenterUpdated = await SportCenter.findByIdAndUpdate(
-    req.params.id,
-    req.body,
-    {
-      new: true,
-      runValidators: true,
-    }
-  );
-
-  if (!sportCenterUpdated) {
-    return next(new AppError(`Can't find sportCenter with given id!`, 404));
-  }
-
-  resp.status(200).json({
-    status: 'success',
-    data: { sportCenter: sportCenterUpdated },
-  });
-});
-
-const deleteSportCenterWithId = catchAsync(async (req, resp, next) => {
-  const sportCenterDeleted = await SportCenter.findByIdAndDelete(req.params.id);
-
-  if (!sportCenterDeleted) {
-    return next(new AppError(`Can't find sportCenter with given id!`, 404));
-  }
-
-  resp.status(200).json({
-    status: 'success',
-    data: null,
-  });
-});
+const createSportCenter = routeHandlerFactory.createOne(SportCenter);
+const updateSportCenterWithId = routeHandlerFactory.updateOne(SportCenter);
+const deleteSportCenterWithId = routeHandlerFactory.deleteOne(SportCenter);
 
 const getSportCenterStats = catchAsync(async (req, resp, next) => {
   const stats = await SportCenter.aggregate([

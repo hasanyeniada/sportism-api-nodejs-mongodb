@@ -1,6 +1,7 @@
 const User = require('./../models/userModel');
 const catchAsync = require('./../utils/catchAsync');
 const AppError = require('./../utils/appError');
+const routeHandlerFactory = require('./routeHandlerFactory');
 
 const filterObj = (obj, ...allowedFields) => {
   const newObj = {};
@@ -10,13 +11,6 @@ const filterObj = (obj, ...allowedFields) => {
   return newObj;
 };
 
-const getAllUsers = (req, resp) => {
-  resp.status(500).json({
-    status: 'error',
-    message: 'This route is not implemented!',
-  });
-};
-
 const createUser = (req, resp) => {
   resp.status(500).json({
     status: 'error',
@@ -24,25 +18,9 @@ const createUser = (req, resp) => {
   });
 };
 
-const getSingleUserWithId = (req, resp) => {
-  resp.status(500).json({
-    status: 'error',
-    message: 'This route is not implemented!',
-  });
-};
-
-const updateUserWithId = (req, resp) => {
-  resp.status(500).json({
-    status: 'error',
-    message: 'This route is not implemented!',
-  });
-};
-
-const deleteUserWithId = (req, resp) => {
-  resp.status(500).json({
-    status: 'error',
-    message: 'This route is not implemented!',
-  });
+const getMe = (req, res, next) => {
+  req.params.id = req.user.id;
+  next();
 };
 
 const updateMe = catchAsync(async (req, res, next) => {
@@ -82,12 +60,20 @@ const deleteMe = catchAsync(async (req, res, next) => {
   });
 });
 
+const getSingleUserWithId = routeHandlerFactory.getOne(User);
+const getAllUsers = routeHandlerFactory.getAll(User);
+
+// Do NOT update passwords with this!
+const updateUserWithId = routeHandlerFactory.updateOne(User);
+const deleteUserWithId = routeHandlerFactory.deleteOne(User);
+
 module.exports = {
   getAllUsers,
-  getSingleUserWithId,
   createUser,
+  getSingleUserWithId,
   deleteUserWithId,
   updateUserWithId,
+  getMe,
   updateMe,
   deleteMe,
 };

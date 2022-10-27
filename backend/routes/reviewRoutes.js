@@ -18,6 +18,7 @@ reviewRouter
   .post(
     authController.checkAuthentication,
     authController.checkAuthorization('user'),
+    reviewRouteHandler.setTourUserIds,
     reviewRouteHandler.createNewReview
   );
 

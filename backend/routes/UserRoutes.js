@@ -18,15 +18,21 @@ router
     authRouteHandler.checkAuthentication,
     authRouteHandler.updatePassword
 );
+
+router.get('/me',
+  userRouteHandlers.getMe,
+  userRouteHandlers.getSingleUserWithId
+);
 router
   .patch('/updateMe',
     authRouteHandler.checkAuthentication,
     userRouteHandlers.updateMe
 );
-router.delete(
+router
+  delete (
   '/deleteMe',
-  authRouteHandler.checkAuthentication,
-  userRouteHandlers.deleteMe
+    authRouteHandler.checkAuthentication,
+    userRouteHandlers.deleteMe
 );
 
 router

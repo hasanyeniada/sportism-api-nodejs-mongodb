@@ -9,13 +9,6 @@ const reviewRouter = require('../routes/reviewRoutes');
 // GET /tour/234fad4/reviews
 // GET /tour/234fad4/reviews/94887fda
 
-// router
-//   .route('/:sportCenterId/reviews')
-//   .post(
-//     authController.checkAuthentication,
-//     authController.checkAuthorization('user'),
-//     reviewRouteHandlers.createNewReview
-//   );
 router.use('/:sportCenterId/reviews', reviewRouter);
 
 router
@@ -32,15 +25,22 @@ router
 router
   .route('/')
   .get(
-    authController.checkAuthentication,
     sportCenterRouteHandlers.getAllSportCenters
   )
-  .post(sportCenterRouteHandlers.createSportCenter);
+  .post(
+    authController.checkAuthentication,
+    authController.checkAuthorization('admin', 'lead-guide'),
+    sportCenterRouteHandlers.createSportCenter
+  );
 
 router
   .route('/:id')
   .get(sportCenterRouteHandlers.getSingleSportCenterWithId)
-  .patch(sportCenterRouteHandlers.updateSportCenterWithId)
+  .patch(
+    authController.checkAuthentication,
+    authController.checkAuthorization('admin', 'lead-guide'),
+    sportCenterRouteHandlers.updateSportCenterWithId
+  )
   .delete(
     authController.checkAuthentication,
     authController.checkAuthorization('admin', 'lead-guide'),

@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const SportCenter = require('./sportCenterModel');
 
 const reviewSchema = new mongoose.Schema(
   {
@@ -32,6 +33,8 @@ const reviewSchema = new mongoose.Schema(
   }
 );
 
+reviewSchema.index({ tour: 1, user: 1 }, { unique: true });
+
 reviewSchema.pre(/^find/, function (next) {
   // this.populate({
   //   path: 'sportCenter',
@@ -46,6 +49,52 @@ reviewSchema.pre(/^find/, function (next) {
     select: 'name photo',
   });
   next();
+});
+
+reviewSchema.statics.calcAverageRatings = async function (sportCenterId) {
+  const stats = await this.aggregate([
+    {
+      $match: { sportCenter: sportCenterId },
+    },
+    {
+      $group: {
+        _id: '$sportCenter',
+        nRating: { $sum: 1 },
+        avgRating: { $avg: '$rating' },
+      },
+    },
+  ]);
+  // console.log(stats);
+
+  if (stats.length > 0) {
+    await SportCenter.findByIdAndUpdate(sportCenterId, {
+      ratingsQuantity: stats[0].nRating,
+      ratingsAverage: stats[0].avgRating,
+    });
+  } else {
+    await SportCenter.findByIdAndUpdate(sportCenterId, {
+      ratingsQuantity: 0,
+      ratingsAverage: 4.5,
+    });
+  }
+};
+
+reviewSchema.post('save', function () {
+  // this points to current review
+  this.constructor.calcAverageRatings(this.tour);
+});
+
+// findByIdAndUpdate
+// findByIdAndDelete
+reviewSchema.pre(/^findOneAnd/, async function (next) {
+  this.r = await this.findOne();
+  // console.log(this.r);
+  next();
+});
+
+reviewSchema.post(/^findOneAnd/, async function () {
+  // await this.findOne(); does NOT work here, query has already executed
+  await this.r.constructor.calcAverageRatings(this.r.tour);
 });
 
 const Review = mongoose.model('Review', reviewSchema);

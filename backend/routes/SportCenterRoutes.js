@@ -3,7 +3,20 @@ const router = express.Router();
 
 const authController = require('../controllers/authController');
 const sportCenterRouteHandlers = require('../controllers/sportCenterController');
-const SportCenter = require('../models/sportCenterModel');
+const reviewRouter = require('../routes/reviewRoutes');
+
+// POST /tour/234fad4/reviews
+// GET /tour/234fad4/reviews
+// GET /tour/234fad4/reviews/94887fda
+
+// router
+//   .route('/:sportCenterId/reviews')
+//   .post(
+//     authController.checkAuthentication,
+//     authController.checkAuthorization('user'),
+//     reviewRouteHandlers.createNewReview
+//   );
+router.use('/:sportCenterId/reviews', reviewRouter);
 
 router
   .route('/top-5-cheap')

@@ -8,6 +8,7 @@ const hpp = require('hpp');
 
 const sportCenterRoutes = require('./routes/sportCenterRoutes');
 const userRoutes = require('./routes/userRoutes');
+const reviewRoutes = require('./routes/reviewRoutes');
 const globalErrorHandler = require('./middlewares/globalErrorHandler');
 const AppError = require('./utils/appError');
 
@@ -52,8 +53,6 @@ app.use(
   })
 );
 
-
-
 // 2) Custom Middlewares
 app.use((req, resp, next) => {
   console.log("Hello from custom middleware...");
@@ -67,6 +66,7 @@ app.use((req, resp, next) => {
 // 3) Routes
 app.use('/api/v1/sportcenters', sportCenterRoutes);
 app.use('/api/v1/users', userRoutes);
+app.use('/api/v1/reviews', reviewRoutes);
 
 // 4) Unhandled Routes
 app.all('*', (req, resp, next) => {

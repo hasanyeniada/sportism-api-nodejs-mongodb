@@ -46,7 +46,8 @@ const sportCenterSchema = new mongoose.Schema(
           // this only points to current doc on NEW document creation
           return val < this.monthlyPrice;
         },
-        message: 'Discount monthlyPrice ({VALUE}) should be below regular monthlyPrice',
+        message:
+          'Discount monthlyPrice ({VALUE}) should be below regular monthlyPrice',
       },
     },
     summary: {
@@ -73,6 +74,23 @@ const sportCenterSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    location: {
+      // GeoJSON
+      type: {
+        type: String,
+        default: 'Point',
+        enum: ['Point'],
+      },
+      coordinates: [Number],
+      address: String,
+      description: String,
+    },
+    personalTrainers: [
+      {
+        type: mongoose.Schema.ObjectId,
+        ref: 'User',
+      },
+    ],
   },
   {
     toJSON: { virtuals: true },
@@ -81,11 +99,19 @@ const sportCenterSchema = new mongoose.Schema(
 );
 
 sportCenterSchema.virtual('workingDuration').get(function () {
-  return (
-    Number(this.workingHours[1].split(':')[0]) -
-    Number(this.workingHours[0].split(':')[0])
-  );
+  // return (
+  //   Number(this.workingHours[1].split(':')[0]) -
+  //   Number(this.workingHours[0].split(':')[0])
+  // );
 });
+
+// Virtual Populate
+sportCenterSchema.virtual('reviews', {
+  ref: 'Review',
+  foreignField: 'sportCenter',
+  localField: '_id',
+});
+
 
 // DOCUMENT MIDDLEWARE: runs before .save() and .create()
 sportCenterSchema.pre('save', function (next) {
@@ -93,12 +119,12 @@ sportCenterSchema.pre('save', function (next) {
   next();
 });
 
-sportCenterSchema.pre('save', function(next) {
+sportCenterSchema.pre('save', function (next) {
   console.log('Will save document...');
   next();
 });
 
-sportCenterSchema.post('save', function(doc, next) {
+sportCenterSchema.post('save', function (doc, next) {
   console.log(doc);
   next();
 });
@@ -116,6 +142,15 @@ sportCenterSchema.post(/^find/, function (docs, next) {
   console.log(`Query took ${Date.now() - this.start} milliseconds!`);
   next();
 });
+
+sportCenterSchema.pre(/^find/, function (next) {
+  this.populate({
+    path: 'personalTrainers',
+    select: '-__v -passwordChangedAt',
+  });
+  next();
+});
+
 
 // AGGREGATION MIDDLEWARE
 sportCenterSchema.pre('aggregate', function (next) {

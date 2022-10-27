@@ -28,7 +28,7 @@ const getAllSportCenters = catchAsync(async (req, resp, next) => {
 
 const getSingleSportCenterWithId = catchAsync(async (req, resp, next) => {
   const sportCenter = await SportCenter.findById(req.params.id);
-  console.log(req.params.id);
+  // const sportCenter = await (await SportCenter.findById(req.params.id)).populated('reviews');
   // Tour.findOne({ _id: id })
 
   if (!sportCenter) {

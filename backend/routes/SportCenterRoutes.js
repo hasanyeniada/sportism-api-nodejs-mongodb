@@ -22,6 +22,16 @@ router
   .route('/sportcenter-stats')
   .get(sportCenterRouteHandlers.getSportCenterStats);
 
+// /tours-within?distance=233&center=-40,45&unit=mi
+// /tours-within/233/center/-40,45/unit/mil
+router
+  .route('/sportcenters-within/:distance/center/:latlng/unit/:unit')
+  .get(sportCenterRouteHandlers.getSportCentersWithin);
+
+router
+  .route('/distances/:latlng/unit/:unit')
+  .get(sportCenterRouteHandlers.getDistances);
+
 router
   .route('/')
   .get(

@@ -161,12 +161,12 @@ sportCenterSchema.pre(/^find/, function (next) {
 
 
 // AGGREGATION MIDDLEWARE
-sportCenterSchema.pre('aggregate', function (next) {
-  this.pipeline().unshift({ $match: { secretSportCenter: { $ne: true } } });
+// sportCenterSchema.pre('aggregate', function (next) {
+//   this.pipeline().unshift({ $match: { secretSportCenter: { $ne: true } } });
 
-  console.log(this.pipeline());
-  next();
-});
+//   console.log(this.pipeline());
+//   next();
+// });
 
 const SportCenter = mongoose.model('SportCenter', sportCenterSchema);
 

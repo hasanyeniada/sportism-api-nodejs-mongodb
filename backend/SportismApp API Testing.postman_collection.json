@@ -1,0 +1,1045 @@
+{
+	"info": {
+		"_postman_id": "aff4aa3e-7580-4768-80d0-ae72d333c5e3",
+		"name": "SportismApp API Testing",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "4057154"
+	},
+	"item": [
+		{
+			"name": "SportCentes API",
+			"item": [
+				{
+					"name": "SportCenter Statistics",
+					"item": [
+						{
+							"name": "Get Top 5 Cheapest SportCenter",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "127.0.0.1:8090/api/v1/sportcenters/top-5-cheap",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "8090",
+									"path": [
+										"api",
+										"v1",
+										"sportcenters",
+										"top-5-cheap"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "SportCenter Statistics",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "127.0.0.1:8090/api/v1/sportcenters/sportcenter-stats",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "8090",
+									"path": [
+										"api",
+										"v1",
+										"sportcenters",
+										"sportcenter-stats"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "POST & Create a New SportCenters",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Sport Center 1\",\r\n    \"workingHours\": [\r\n        \"09:00\",\r\n        \"10:00\"\r\n    ],\r\n    \"ratingsAverage\": 4.5,\r\n    \"ratingsQuantity\": 37,\r\n    \"monthlyPrice\": 300,\r\n    \"priceDiscount\": 0,\r\n    \"summary\": \"Sport Center 1 Summary\",\r\n    \"description\": \"Sport Center 1 Description\",\r\n    \"imageCover\": \"sport-center-1-cover.jpg\",\r\n    \"images\": [\r\n        \"sport-center-1-1.jpg\",\r\n        \"sport-center-1-2.jpg\",\r\n        \"sport-center-1-3.jpg\"\r\n    ],\r\n    \"location\": {\r\n        \"description\": \"Üçyol, İzmir\",\r\n        \"type\": \"Point\",\r\n        \"coordinates\": [38.404410, 27.118954],\r\n        \"address\": \"Bahçelievler, 35280 Karabağlar/İzmir\"\r\n    },\r\n    \"personalTrainers\": [\"635b24127051e04c5a5cd7e4\", \"635b24227051e04c5a5cd7e6\"]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL}}/sportcenters",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"sportcenters"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET All SportCenters",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzNTQwZTFmZDM5MWQ4MzNiZmVhNDgxNSIsImlhdCI6MTY2NjQ5MjM4NiwiZXhwIjoxNjY2NDkyMzkxfQ.IoU3moeVsShbjMJl_i3e49UqsMcTquZi9TnDmd40Ysg",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{URL}}/sportcenters",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"sportcenters"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET All SportCenters by Filtering&Sorting&FilteringFields&Pagination",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}/sportcenters?sort=monthlyPrice",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"sportcenters"
+							],
+							"query": [
+								{
+									"key": "priceDiscount",
+									"value": "0",
+									"disabled": true
+								},
+								{
+									"key": "monthlyPrice",
+									"value": "300",
+									"disabled": true
+								},
+								{
+									"key": "sort",
+									"value": "monthlyPrice"
+								},
+								{
+									"key": "page",
+									"value": "1",
+									"disabled": true
+								},
+								{
+									"key": "limit",
+									"value": "5",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET All SportCenters by Filtering",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}/sportcenters?priceDiscount=0&monthlyPrice=300",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"sportcenters"
+							],
+							"query": [
+								{
+									"key": "priceDiscount",
+									"value": "0"
+								},
+								{
+									"key": "monthlyPrice",
+									"value": "300"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET All SportCenters by Sorting with Price",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}/sportcenters?sort=monthlyPrice",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"sportcenters"
+							],
+							"query": [
+								{
+									"key": "sort",
+									"value": "monthlyPrice"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET All SportCenters by Pagination",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}/sportcenters?page=1&limit=5",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"sportcenters"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "1"
+								},
+								{
+									"key": "limit",
+									"value": "5"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET Single SportCenter with Id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}/sportcenters/635b2630af8312d802a9cddb",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"sportcenters",
+								"635b2630af8312d802a9cddb"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "SportCenters within distance",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}/sportcenters/sportcenters-within/1000/center/27.118954,38.40441/unit/mi",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"sportcenters",
+								"sportcenters-within",
+								"1000",
+								"center",
+								"27.118954,38.40441",
+								"unit",
+								"mi"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "SportCenters distance to a point",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}/sportcenters/distances/21.118954,38.40441/unit/mi",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"sportcenters",
+								"distances",
+								"21.118954,38.40441",
+								"unit",
+								"mi"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "PATCH & Update a SportCenter",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"monthlyPrice\": 500\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL}}/sportcenters/635b2630af8312d802a9cddb",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"sportcenters",
+								"635b2630af8312d802a9cddb"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DELETE a SportCenter",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}/sportcenters/635b2630af8312d802a9cddb",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"sportcenters",
+								"635b2630af8312d802a9cddb"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Users API",
+			"item": [
+				{
+					"name": "Authentication",
+					"item": [
+						{
+							"name": "Login User",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.environment.set(\"jwt\", pm.response.json().token);"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"email\": \"test@haye.io\",\r\n    \"password\": \"{{password}}\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{URL}}/users/login",
+									"host": [
+										"{{URL}}"
+									],
+									"path": [
+										"users",
+										"login"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "SignUp User",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.environment.set(\"jwt\", pm.response.json().token);"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"name\": \"Ceyda PT\",\r\n    \"email\": \"test@ceydapt.io\",\r\n    \"password\": \"111222333\",\r\n    \"passwordConfirm\": \"111222333\",\r\n    \"role\": \"personal-trainer\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{URL}}/users/signup",
+									"host": [
+										"{{URL}}"
+									],
+									"path": [
+										"users",
+										"signup"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Forgot Password",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"email\": \"test@selin.io\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{URL}}/users/forgotPassword",
+									"host": [
+										"{{URL}}"
+									],
+									"path": [
+										"users",
+										"forgotPassword"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Reset Password",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.environment.set(\"jwt\", pm.response.json().token);"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"password\": \"111222333\",\r\n    \"passwordConfirm\": \"111222333\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{URL}}/users/resetPassword/a8d9d5d6e94afd5f9618ba096546bcb6d158a539ef8ed203539209d112be3d0d",
+									"host": [
+										"{{URL}}"
+									],
+									"path": [
+										"users",
+										"resetPassword",
+										"a8d9d5d6e94afd5f9618ba096546bcb6d158a539ef8ed203539209d112be3d0d"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update User Password",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.environment.set(\"jwt\", pm.response.json().token);"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{jwt}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"password\": \"111222333\",\r\n    \"passwordConfirm\": \"111222333\",\r\n    \"newPassword\": \"111222333\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{URL}}/users/updateMyPassword",
+									"host": [
+										"{{URL}}"
+									],
+									"path": [
+										"users",
+										"updateMyPassword"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Login User Simulate NoSql Query Injection",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.environment.set(\"jwt\", pm.response.json().token);"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{jwt}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"email\": { \"$gt\" : \"\" },\r\n    \"password\": \"12345test\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{URL}}/users/login",
+									"host": [
+										"{{URL}}"
+									],
+									"path": [
+										"users",
+										"login"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "updateMe",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Kubi Yeniada\",\r\n    \"email\": \"demo@kubi.io\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL}}/users/updateMe",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"users",
+								"updateMe"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "deleteMe",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}/users/deleteMe",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"users",
+								"deleteMe"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Users",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}/users",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Single User With Id",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}/users/635b1f8a16346203e65e661a",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"users",
+								"635b1f8a16346203e65e661a"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Current User",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}/users/me",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"users",
+								"me"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "POST & Create A User",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Selin Coşkun\",\r\n    \"email\": \"test@gmail.com\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL}}/users",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "PATCH & Update Current User Data",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"test@haye.io\" \r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL}}/users/635b1f8a16346203e65e661a",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"users",
+								"635b1f8a16346203e65e661a"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"description": "All Users Requests"
+		},
+		{
+			"name": "Reviews API",
+			"item": [
+				{
+					"name": "Get All Reviews",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}/reviews/",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"reviews",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create New Review",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"review\": \"Test\",\r\n    \"rating\": 5.0,\r\n    \"sportCenter\": \"635930741f850de5f1158ec9\",\r\n    \"user\": \"6355c45c5bc4df3c82ad8a4a\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL}}/reviews/",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"reviews",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Review On SportCenter",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"review\": \"Test Review 1\",\r\n    \"rating\": 4\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL}}/sportCenters/635930741f850de5f1158eca/reviews/",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"sportCenters",
+								"635930741f850de5f1158eca",
+								"reviews",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET Reviews On SportCenter",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}/sportCenters/635930741f850de5f1158eca/reviews/",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"sportCenters",
+								"635930741f850de5f1158eca",
+								"reviews",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get User Profile",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}/users/me",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"users",
+								"me"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Test Static File Serve",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "127.0.0.1:8090/index.html",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8090",
+					"path": [
+						"index.html"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

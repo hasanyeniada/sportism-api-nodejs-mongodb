@@ -1,0 +1,65 @@
+[
+  {
+    "_id": "635b2b72b85d65d54d55e435",
+    "name": "Hasan Yeniada",
+    "email": "test@haye.io",
+    "role": "admin",
+    "active": true,
+    "photo": "user-1.jpg",
+    "password": "$2a$12$Q0grHjH9PXc6SxivC8m12.2mZJ9BbKcgFpwSG4Y1ZEII8HJVzWeyS"
+  },
+  {
+    "_id": "635b2b7db85d65d54d55e437",
+    "name": "Selin Yeniada",
+    "email": "test@selo.io",
+    "role": "user",
+    "active": true,
+    "photo": "user-2.jpg",
+    "password": "$2a$12$hP1h2pnNp7wgyZNRwPsOTeZuNzWBv7vHmsR3DT/OaPSUBQT.y0S.."
+  },
+  {
+    "_id": "635b2b88b85d65d54d55e439",
+    "name": "Kubi Yeniada",
+    "email": "demo@kubi.io",
+    "role": "user",
+    "active": true,
+    "photo": "user-3.jpg",
+    "password": "$2a$12$tm33.M/4pfEbZF64WbFuHuVFv85v4qEhi.ik8njbud7yaoqCZpjiy"
+  },
+  {
+    "_id": "635b2bacb85d65d54d55e43b",
+    "name": "Ali PT",
+    "email": "test@selimpt.io",
+    "role": "personal-trainer",
+    "active": true,
+    "photo": "user-4.jpg",
+    "password": "$2a$12$OOPr90tBEBF1Iho3ox0Jde0O/WXUR0VLA5xdh6tWcu7qb.qOCvSg2"
+  },
+  {
+    "_id": "635b2bb4b85d65d54d55e43d",
+    "name": "Veli PT",
+    "email": "test@hakanpt.io",
+    "role": "personal-trainer",
+    "active": true,
+    "photo": "user-5.jpg",
+    "password": "$2a$12$XCXvvlhRBJ8CydKH09v1v.jpg0hB9gVVfMVEoz4MsxqL9zb5PrF42"
+  },
+  {
+    "_id": "635b2bbcb85d65d54d55e43f",
+    "name": "Ceyda PT",
+    "email": "test@ceydapt.io",
+    "role": "personal-trainer",
+    "active": true,
+    "photo": "user-6.jpg",
+    "password": "$2a$12$II1F3aBSFDF3Xz7iB4rk/.a2dogwkClMN5gGCWrRlILrG1xtJG7q6"
+  },
+  {
+    "_id": "635b2b46b85d65d54d55e433",
+    "name": "Cegere Yeniada",
+    "email": "test@cegere.io",
+    "role": "sport-center-lead",
+    "active": true,
+    "photo": "user-7.jpg",
+    "password": "$2a$12$Jb/ILhdDV.ZpnPMu19xfe.NRh5ntE2LzNMNcsty05QWwRbmFFVMKO"
+  }
+]

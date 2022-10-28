@@ -18,7 +18,7 @@ const userSchema = new mongoose.Schema({
   photo: String,
   role: {
     type: String,
-    enum: ['user', 'guide', 'lead-guide', 'admin'],
+    enum: ['user', 'personal-trainer', 'sport-center-lead', 'admin'],
     default: 'user'
   },
   password: {
@@ -93,7 +93,7 @@ userSchema.methods.checkIfPasswordChanged = function (JWTTimestamp) {
   return false;
 };
 
-userSchema.methods.createResetToken = async function () {
+userSchema.statics.createResetToken = async function () {
   const resetToken = crypto.randomBytes(32).toString('hex');
 
   this.passwordResetToken = crypto

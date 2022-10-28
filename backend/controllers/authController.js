@@ -1,4 +1,5 @@
 const jwt = require('jsonwebtoken');
+const crypto = require('crypto');
 const { promisify } = require('util');
 
 const User = require('../models/userModel');
@@ -126,7 +127,7 @@ const forgotPassword = catchAsync(async (req, resp, next) => {
   }
 
   // 2) Generate the random reset token
-  const resetToken = await user.createResetToken();
+  const resetToken = await user.constructor.createResetToken();
   await user.save({ validateBeforeSave: false });
 
   // 3) Send it to user's email

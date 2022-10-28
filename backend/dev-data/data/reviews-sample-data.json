@@ -1,0 +1,16 @@
+[
+  {
+    "_id": "5c8a34ed14eb5c17645c9101",
+    "review": "Review 1",
+    "rating": 5,
+    "user": "635b2b7db85d65d54d55e437",
+    "sportCenter": "1c8a34ed14eb5c17645c9101"
+  },
+  {
+    "_id": "5c8a34ed14eb5c17645c9104",
+    "review": "Review 2",
+    "rating": 4,
+    "user": "635b2b88b85d65d54d55e439",
+    "sportCenter": "2c8a34ed14eb5c17645c9101"
+  }
+]
